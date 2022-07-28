@@ -1,0 +1,85 @@
+
+body {
+    margin: 0;
+  }
+  
+  .container,
+  .ring,
+  .buttonShadow,
+  button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  img,
+  svg,
+  .cap,
+  .buttonShadow,
+  button {
+    position: absolute;
+  }
+  
+  .container {
+    height: 100vh;
+    width: 100vw;
+    position: relative;
+    background: #070100;
+  }
+  
+  img {
+    top: 50px;
+    width: 90px;
+  }
+  
+  #st0 {
+    fill: #fff;
+    stroke: #e4836b;
+  }
+  
+  .ring {
+    position: relative;
+    height: 340px;
+    width: 300px;
+  }
+  
+  .cap {
+    height: 340px;
+    width: 35px;
+    overflow: hidden;
+  }
+  
+  .up {
+    top: 0px;
+  }
+  
+  .buttonShadow {
+    height: 200px;
+    width: 200px;
+    border-radius: 50%;
+    z-index: 20;
+    box-shadow: 4px 4px 7px grey, -4px -4px 7px grey;
+  }
+  
+  button {
+    height: 200px;
+    width: 200px;
+    border-radius: 50%;
+    z-index: 20;
+    background: #070100;
+    outline: none;
+    border: none;
+    text-align: center;
+    cursor: pointer;
+  }
+  
+  @for $i from 1 through 100 {
+    .cap#{$i} {
+      transform: rotate(($i * 15) + deg);
+    }
+  }
+  
+  svg {
+    background: transparent;
+  }
+  

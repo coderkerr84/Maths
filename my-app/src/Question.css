@@ -1,0 +1,14 @@
+.Digit {
+    /* border-color: aquamarine; */
+    padding:20px;
+    /* margin:10px; */
+    /* border:outset; */
+    font-size: larger;
+  }
+
+  .InputBox{
+    height: 50px;
+    width: 80px;
+    font-size: larger;
+    text-align: center;
+  }
