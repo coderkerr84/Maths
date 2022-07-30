@@ -1,7 +1,5 @@
-import logo from './logo.svg';
+import ReactTimerStopwatch from 'react-stopwatch-timer';
 import './App.css';
-// import './FlameButton.scss';
-// import Flame from "./FlameButton.js"
 import Question from './Question.js';
 import React, {useState} from 'react';
 import GetMarvelResponse from './MarvelApiCall.js';
@@ -10,11 +8,12 @@ import wallpaper from "../src/wallpaper.png";
 import earthSuccessImage from "../src/earth_success.jpg";
 import earthFailureImage from "../src/earth_failure.jpg";
 import skullImage from "../src/skull.png";
-
-import giftImage1 from "../src/gift1.png";
+import $ from 'jquery';
 
 function App() {
   
+  const [timerIsOn, setTimerIsOn] = useState(false);
+
   const [score, setScore] = useState(0);
   const [deaths, setDeaths] = useState(0);
   const [level, setLevel] = useState(1);
@@ -24,10 +23,9 @@ function App() {
   const [plusCount, setPlusCount] = useState(0);
   const [timesCount, setTimesCount] = useState(0);
   const [divideCount, setDivideCount] = useState(0);
+  const fromTime = new Date(0, 0, 0, 0, 0, 0, 0);
 
-  //const Goodies = [1017575,1009351,1009368,1010338,1009157,1009718];
-  //const [selectedGoody, setSelectedGoody] = useState(0);
-  const LastLevel = 100;
+  const LastLevel = 10;
 
   const Baddies = [
     1017575,1017303,1017577,1011500,1014986,
@@ -48,7 +46,7 @@ function App() {
     1009514,1009519,1009522,1014528,1010334,
     1010964,1009526,1010817,1009534,1009189,
     1009276,1009187,1010763,1010735,1011219,
-    1011436,1010837,1011390,1009537,1010744,
+    1011436,1011436,1011390,1009537,1010744,
     1010966,1010344,1011318,1010968,1009555, //Sage
     1009561,1011197,1010950,1010840,1010359,
     1010971,1009573,1011313,1009181,1011065, //Epoch
@@ -82,10 +80,10 @@ const Praise = [
   'When did you get SO SMART!?',
   'SWEET-AS LIL ONE!',
   'Woo hoo!',
-  'SO GOOD LIKE ... CHOCO SOY MILK',
+  'SO GOOD',
   'You are better than ICE CREAM!',
   'Winna winna chicken dinna',
-  'What even ARE you?!',
+  'YOU are the real super hero!!',
   'Mathnificient!',
   'You must be a grown-up!',
   'More brains than an octopus!',
@@ -105,6 +103,7 @@ const Praise = [
 
       // 👇️ your logic here
       ScoreUserEntry();
+      setTimerIsOn(true);     
     }
   }
 
@@ -126,12 +125,13 @@ const Praise = [
         if(level === LastLevel)
         {
           document.getElementById("Badguy").src = earthSuccessImage;
-          //document.getElementById("BadguyName").innerText = "YOU DID IT - THANK YOU!!";
-          setButtonText("!! Choose Your Prize !!");
+          // document.getElementById("BadguyName").innerText = "YOU DID IT!" + $(".react-stopwatch-timer__table").lastChild.innerHTML;
+
+          setButtonText("!! Choose Your Prize !!");   
         }
         else
         {
-          GetMarvelResponse(Baddies[level],"Badguy");   
+          GetMarvelResponse(Baddies[level],"Badguy");
         }
     }
     else
@@ -318,13 +318,13 @@ const Praise = [
   return (
     <div className="App" style={{ backgroundImage: `url(${wallpaper})`,backgroundSize: 'cover', minHeight:1000 }} >
       <header className="App-header">
-        <span className="Topcorner">
+      <ReactTimerStopwatch isOn={timerIsOn} className="react-stopwatch-timer__table" watchType="stopwatch" displayCricle={true} color="gray" hintColor="red" fromTime={fromTime}/>
+        <span className="Topcorner">      
           <img id="Skull" alt="Skull" src={skullImage} width={45}/>
           <span style={{verticalAlign: 'top'}}>
-              {deaths}
+              {deaths}              
           </span>
         </span>
-        {/* <img src={logo} className="App-logo" alt="logo" /> */}
         <table style={{fontSize: 'xxx-large'}}>
           <tr>
             <td>
@@ -357,10 +357,10 @@ const Praise = [
         </table>
 
         <p style={{margin:'inherit'}}>
-        <h1 className="RoundCounter">Round {level}</h1>
+        <h1 className="RoundCounter">Round {level} </h1>            
           <span>
             <img className="Badguy" id="Badguy" alt="Bad hero" src="http://i.annihil.us/u/prod/marvel/i/mg/6/30/4c7c64437b5a1/detail.jpg"/>
-            <div id="BadguyName">Mr Hyde</div>
+            <div id="BadguyName">Solve the sum to beat Mr Hyde!</div>
           </span>
           
           <h2 className={"Round"+GetRandomInt(10)}>{feedback}</h2>

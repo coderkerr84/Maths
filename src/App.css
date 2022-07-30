@@ -49,6 +49,14 @@
   font-size: larger;
   font-family:fantasy;
 }
+.InputButton:active{
+  border-style:solid;
+  background-color: darkred;
+  color: yellow;;
+  font-size: larger;
+  font-family:fantasy;
+}
+
 
 .RoundCounter{
   font-style:oblique;
@@ -99,4 +107,14 @@
   top:0;
   right:0;
   margin: 10px;
+}
+
+.react-stopwatch-timer__table{
+  position:fixed;
+  top:0px;
+  left:0px;
+  font-size: smaller;
+  display: flex;
+  height:auto;
+  width:auto;
 }
