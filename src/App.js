@@ -248,6 +248,13 @@ const Praise = [
       {
         var leftTemp = GetRandomInt(8);
         var rightTemp = GetRandomInt(12);
+
+        if(rightTemp == 0)
+        {
+          // avoid a divide by 0.
+          rightTemp = 2;
+        }
+
         var multiple =   leftTemp * rightTemp;
 
         leftDigit = multiple;
