@@ -15,7 +15,7 @@ var PUBLIC_KEY = "c92750c0b3658afe9b399abdcb57a904";
   // the api deals a lot in ids rather than just the strings you want to use
   //var characterId = '1009220'; // capt amer                                                                             
 
-  var url = 'http://gateway.marvel.com/v1/public/characters';
+  var url = 'https://gateway.marvel.com/v1/public/characters';
 
   console.log(url);
   $.getJSON(url, {
