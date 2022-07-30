@@ -25,7 +25,7 @@ function App() {
   const [divideCount, setDivideCount] = useState(0);
   const fromTime = new Date(0, 0, 0, 0, 0, 0, 0);
 
-  const LastLevel = 10;
+  const LastLevel = 100;
 
   const Baddies = [
     1017575,1017303,1017577,1011500,1014986,
@@ -318,7 +318,7 @@ const Praise = [
   return (
     <div className="App" style={{ backgroundImage: `url(${wallpaper})`,backgroundSize: 'cover', minHeight:1000 }} >
       <header className="App-header">
-      <ReactTimerStopwatch isOn={timerIsOn} className="react-stopwatch-timer__table" watchType="stopwatch" displayCricle={true} color="gray" hintColor="red" fromTime={fromTime}/>
+      {/* <ReactTimerStopwatch isOn={timerIsOn} className="react-stopwatch-timer__table" watchType="stopwatch" displayCricle={true} color="gray" hintColor="red" fromTime={fromTime}/> */}
         <span className="Topcorner">      
           <img id="Skull" alt="Skull" src={skullImage} width={45}/>
           <span style={{verticalAlign: 'top'}}>
