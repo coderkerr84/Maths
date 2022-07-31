@@ -109,6 +109,8 @@ const Praise = [
     },
   };
 
+  const questionTypes = ["answerIsMissing","leftIsMissing","rightIsMissing"];
+
   const [modalIsOpen, setIsOpen] = React.useState(false);
 
   function openModal() {
@@ -122,7 +124,7 @@ const Praise = [
   }
 
   useEffect(()=>{
-
+    document.getElementById("userAnswer").focus();
   });
 
   const keyDownHandler = event => {
@@ -171,8 +173,7 @@ const Praise = [
       document.getElementById("Badguy").src = earthFailureImage;
       document.getElementById("BadguyName").innerText = "~~~~~~ BoOoOoOoOoOoM!!!! ~~~~~~~";
       setDeaths(deaths+1);
-    }
-    document.getElementById("userAnswer").focus();
+    }    
   } 
 
   function CreateQuestion(level)
@@ -439,7 +440,7 @@ const Praise = [
 
         {jsonQuestions.map(q => 
           
-          <Question leftDigit={q.firstDigit} rightDigit={q.secondDigit} operator={q.operator} answer={q.answer} callbackMe={keyDownHandler}/>
+          <Question leftDigit={q.firstDigit} rightDigit={q.secondDigit} operator={q.operator} answer={q.answer} questionType={level > 40 ? questionTypes[GetRandomInt(2)] : "answerIsMissing" } callbackMe={keyDownHandler}/>
           
          )
         }
