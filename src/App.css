@@ -42,7 +42,7 @@
 .InputButton{
   margin:20px;
   height: 80px;
-  width: 400px;
+  width: 360px;
   border-style:dotted;
   background-color: yellow;
   color: darkred;
@@ -55,6 +55,9 @@
   color: yellow;;
   font-size: larger;
   font-family:fantasy;
+}
+.SmallerButton{
+  width: 200px;
 }
 
 .RoundCounter{
@@ -113,4 +116,9 @@
   top:0;
   left:0;
   margin: 10px;
+}
+
+input[type="checkbox"] {
+  transform:scale(2, 2);
+  margin:12px;
 }
