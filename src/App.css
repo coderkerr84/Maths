@@ -45,7 +45,7 @@
   width: 400px;
   border-style:dotted;
   background-color: yellow;
-  color: darkred;;
+  color: darkred;
   font-size: larger;
   font-family:fantasy;
 }
@@ -56,7 +56,6 @@
   font-size: larger;
   font-family:fantasy;
 }
-
 
 .RoundCounter{
   font-style:oblique;
@@ -106,5 +105,12 @@
   position:absolute;
   top:0;
   right:0;
+  margin: 10px;
+}
+
+.OppositeTopcorner{
+  position:absolute;
+  top:0;
+  left:0;
   margin: 10px;
 }

@@ -1,13 +1,15 @@
+import React, {useState} from 'react';
+import Modal from 'react-modal';
 import ReactTimerStopwatch from 'react-stopwatch-timer';
 import './App.css';
 import Question from './Question.js';
-import React, {useState} from 'react';
 import GetMarvelResponse from './MarvelApiCall.js';
 import { useEffect } from "react";
 import wallpaper from "../src/wallpaper.png";
 import earthSuccessImage from "../src/earth_success.jpg";
 import earthFailureImage from "../src/earth_failure.jpg";
 import skullImage from "../src/skull.png";
+import hamburgerImage from "../src/hamburger.png";
 import $ from 'jquery';
 
 function App() {
@@ -24,6 +26,11 @@ function App() {
   const [timesCount, setTimesCount] = useState(0);
   const [divideCount, setDivideCount] = useState(0);
   const fromTime = new Date(0, 0, 0, 0, 0, 0, 0);
+
+  const [checkboxAdditions, setCheckboxAdditions] = useState(true);
+  const [checkboxSubtractions, setCheckboxSubtractions] = useState(true);
+  const [checkboxMultiplications, setCheckboxMultiplications] = useState(true);
+  const [checkboxDivisions, setCheckboxDivisions] = useState(true);
 
   const LastLevel = 100;
 
@@ -89,9 +96,34 @@ const Praise = [
   'More brains than an octopus!',
   'Watch out Jr Einstein is about!',
   'Watch out Jr Einstein is about!'];
+  
+  const customStyles = {
+    content: {
+      top: '50%',
+      left: '50%',
+      right: 'auto',
+      bottom: 'auto',
+      marginRight: '-50%',
+      transform: 'translate(-50%, -50%)',
+      height:'600',
+      width:'400',
+
+    },
+  };
+
+  const [modalIsOpen, setIsOpen] = React.useState(false);
+
+  function openModal() {
+    setIsOpen(true);
+  }
+
+  function closeModal() {
+    PopulateQuestions(); 
+    setLevel(level);       
+    setIsOpen(false);
+  }
 
   useEffect(()=>{
-
 
   });
 
@@ -114,14 +146,15 @@ const Praise = [
   
   function ScoreUserEntry()
   {
-    if(document.getElementById("userAnswer").value == '') return;
+    if(document.getElementById("userAnswer").value === '') return;
     if(document.getElementById("answer").value === document.getElementById("userAnswer").value)
     {
         setScore();
+        setLevel(level + 1);
         setFeedback(Praise[GetRandomInt(Praise.length - 1)]);
         // readme: this looks like an anti pattern, old-skool JS because didn't know how to make the Question.userAnswer reset itself. (callbacks?)
-        document.getElementById("userAnswer").value = "";
-        PopulateJsonQuestions();
+        document.getElementById("userAnswer").value = "";        
+        PopulateQuestions();
         if(level === LastLevel)
         {
           document.getElementById("Badguy").src = earthSuccessImage;
@@ -144,127 +177,93 @@ const Praise = [
     document.getElementById("userAnswer").focus();
   } 
 
-  function PopulateJsonQuestions()
+  function CreateQuestion(level)
   {
-    setLevel(level + 1);
-    //alert(level);
-    var leftDigit = 0;
-    var rightDigit = 0;
-    var answer = 0 ;
-    var operator = "=";
+    var question = {leftDigit:0, rightDigit:0, answer:0, operator:""};
+    var leftMax = 0;
+    var rightMax = 0;
 
-    if(level <= 2)
+    var questionTypes = [];
+
+    if(checkboxAdditions) 
     {
-      // just adds
-        leftDigit = GetRandomInt(5);
-        rightDigit = GetRandomInt(5);
-        operator = "+";
-        answer = leftDigit + rightDigit;
-
+      questionTypes[questionTypes.length] = "add";
+      
     }
-    else if(level <= 6)
-    {
-      // just adds
-        leftDigit = GetRandomInt(15);
-        rightDigit = GetRandomInt(15);
-        operator = "+";
-        answer = leftDigit + rightDigit;
-
+    
+    if(checkboxDivisions) {
+      questionTypes[questionTypes.length] = "divide";
+      
     }
-    else if(level <= 10)
-    {
-      // just adds and minuses
 
-      if(GetRandomInt(2))
-      {
-        leftDigit = GetRandomInt(11);
-        rightDigit = GetRandomInt(11);
-        operator = "+";
-        answer = leftDigit + rightDigit;
-      }
-      else
-      {
-        leftDigit = GetRandomInt(13);
-        rightDigit = GetRandomInt(5);
-        operator = "-";
-        answer = leftDigit - rightDigit;
-      }
-
+    if(checkboxMultiplications) {
+      questionTypes[questionTypes.length] = "times";
+      
     }
-    else if(level > 10 && level < 20)
-    {
-      if(GetRandomInt(5) < 2)
-      {
-        leftDigit = GetRandomInt(30);
-        rightDigit = GetRandomInt(30);
-        operator = "+";
-        answer = leftDigit + rightDigit;
-      }
-      else
-      {
-        leftDigit = GetRandomInt(16);
-        rightDigit = GetRandomInt(5);
-        operator = "x";
-        answer = leftDigit * rightDigit;
-      }
 
+    if(checkboxSubtractions) {
+      questionTypes[questionTypes.length] = "minus";
+      
     }
-    else if(level >= 20 && level < 50)
-    {
-      var rand = GetRandomInt(5);
-      if(rand < 1)
-      {
-        leftDigit = GetRandomInt(21);
-        rightDigit = GetRandomInt(14);
-        operator = "-";
-        answer = leftDigit - rightDigit;
-      }
-      else if(rand < 2)
-      {
-        leftDigit = GetRandomInt(100);
-        rightDigit = GetRandomInt(100);
-        operator = "+";
-        answer = leftDigit + rightDigit;
-      }
-      else
-      {
-        leftDigit = GetRandomInt(8);
-        rightDigit = GetRandomInt(8);
-        operator = "x";
-        answer = leftDigit * rightDigit;
-      }
 
-    }
-    else
+    if(questionTypes.length > 0)
     {
-      var rand = GetRandomInt(5);
-      if(rand <= 1)
-      {
-        leftDigit = GetRandomInt(100);
-        rightDigit = GetRandomInt(100);
-        operator = "-";
-        answer = leftDigit - rightDigit;
-      }
-      else if(rand <= 2)
-      {
-        leftDigit = GetRandomInt(100);
-        rightDigit = GetRandomInt(100);
-        operator = "+";
-        answer = leftDigit + rightDigit;
-      }
-      else if(rand <= 3)
-      {
-        leftDigit = GetRandomInt(10);
-        rightDigit = GetRandomInt(15);
-        operator = "x";
-        answer = leftDigit * rightDigit;
-      }
-      else
-      {
-        var leftTemp = GetRandomInt(8);
-        var rightTemp = GetRandomInt(12);
+      var chosenQType = questionTypes[GetRandomInt(questionTypes.length)];
 
-        if(rightTemp == 0)
+      if(chosenQType === "add")
+      {
+
+        if(level < 10)
+        {
+          leftMax = 10;
+          rightMax = 10;
+        }
+        else if(level < 50)
+        {
+          leftMax = 30;
+          rightMax = 30;
+        }
+        else
+        {
+          leftMax = 100;
+          rightMax = 100;
+        }
+
+        question.leftDigit = GetRandomInt(leftMax);
+        question.rightDigit = GetRandomInt(rightMax);
+        question.operator = "+";
+        question.answer = question.leftDigit + question.rightDigit;
+
+        setPlusCount(plusCount + 1);
+      }
+      else if(chosenQType === "divide")
+      {
+
+        if(level < 10)
+        {
+          leftMax = 5;
+          rightMax = 5;
+        }
+        else if(level < 30)
+        {
+          leftMax = 4;
+          rightMax = 8;
+        }
+        else if(level < 50)
+        {
+          leftMax = 5;
+          rightMax = 10;
+        }
+        else
+        {
+          leftMax = 10;
+          rightMax = 10;
+        }
+
+        var leftTemp = GetRandomInt(leftMax);
+        var rightTemp = GetRandomInt(rightMax);
+
+        if(rightTemp === 0)
         {
           // avoid a divide by 0.
           rightTemp = 2;
@@ -272,37 +271,244 @@ const Praise = [
 
         var multiple =   leftTemp * rightTemp;
 
-        leftDigit = multiple;
-        rightDigit = rightTemp;
-        operator = "/";
-        answer = leftDigit / rightDigit;
+        question.leftDigit = multiple;
+        question.rightDigit = rightTemp;
+        question.operator = "/";
+        question.answer = question.leftDigit / question.rightDigit;
+
+        setDivideCount(divideCount + 1);
       }
-    }
-    
-    if(operator == "+")
-    {
-      setPlusCount(plusCount + 1);
-    }
-    else if(operator == "-")
-    {
-      setMinusCount(minusCount + 1);
-    }
-    else if(operator == "x")
-    {
-      setTimesCount(timesCount + 1);
-    }
-    else if(operator == "/")
-    {
-      setDivideCount(divideCount + 1);
+      else if(chosenQType === "times")
+      {
+        
+        if(level < 10)
+        {
+          leftMax = 5;
+          rightMax = 5;
+        }
+        else if(level < 30)
+        {
+          leftMax = 5;
+          rightMax = 10;
+        }
+        else if(level < 50)
+        {
+          leftMax = 10;
+          rightMax = 10;
+        }
+        else
+        {
+          leftMax = 5;
+          rightMax = 20;
+        }
+
+        question.leftDigit = GetRandomInt(leftMax);
+        question.rightDigit = GetRandomInt(rightMax);
+        question.operator = "x";
+        question.answer = question.leftDigit * question.rightDigit;
+
+        setTimesCount(timesCount + 1);
+      }
+      else if(chosenQType === "minus")
+      {
+
+        if(level < 10)
+        {
+          leftMax = 10;
+          rightMax = 5;
+        }
+        else if(level < 50)
+        {
+          leftMax = 20;
+          rightMax = 10;
+        }
+        else
+        {
+          leftMax = 100;
+          rightMax = 100;
+        }
+
+        question.leftDigit = GetRandomInt(leftMax);
+        question.rightDigit = GetRandomInt(rightMax);
+        question.operator = "-";
+        question.answer = question.leftDigit - question.rightDigit;
+
+        setMinusCount(minusCount + 1);
+      }
+      
     }
 
+    return question;
+  }
+
+  function PopulateQuestions()
+  {
+    var q = CreateQuestion(level);
     setJsonQuestion([{
-        firstDigit:leftDigit,
-        secondDigit:rightDigit,
-        operator:operator,
-        answer:answer
-      }]
-    );
+      firstDigit:q.leftDigit,
+      secondDigit:q.rightDigit,
+      operator:q.operator,
+      answer:q.answer
+    }]
+  );
+    return;
+
+    // //alert(level);
+    // var leftDigit = 0;
+    // var rightDigit = 0;
+    // var answer = 0 ;
+    // var operator = "=";
+
+    // if(level <= 2)
+    // {
+    //   // just adds
+    //     leftDigit = GetRandomInt(5);
+    //     rightDigit = GetRandomInt(5);
+    //     operator = "+";
+    //     answer = leftDigit + rightDigit;
+
+    // }
+    // else if(level <= 6)
+    // {
+    //   // just adds
+    //     leftDigit = GetRandomInt(15);
+    //     rightDigit = GetRandomInt(15);
+    //     operator = "+";
+    //     answer = leftDigit + rightDigit;
+
+    // }
+    // else if(level <= 10)
+    // {
+    //   // just adds and minuses
+
+    //   if(GetRandomInt(2))
+    //   {
+    //     leftDigit = GetRandomInt(11);
+    //     rightDigit = GetRandomInt(11);
+    //     operator = "+";
+    //     answer = leftDigit + rightDigit;
+    //   }
+    //   else
+    //   {
+    //     leftDigit = GetRandomInt(13);
+    //     rightDigit = GetRandomInt(5);
+    //     operator = "-";
+    //     answer = leftDigit - rightDigit;
+    //   }
+
+    // }
+    // else if(level > 10 && level < 20)
+    // {
+    //   if(GetRandomInt(5) < 2)
+    //   {
+    //     leftDigit = GetRandomInt(30);
+    //     rightDigit = GetRandomInt(30);
+    //     operator = "+";
+    //     answer = leftDigit + rightDigit;
+    //   }
+    //   else
+    //   {
+    //     leftDigit = GetRandomInt(16);
+    //     rightDigit = GetRandomInt(5);
+    //     operator = "x";
+    //     answer = leftDigit * rightDigit;
+    //   }
+
+    // }
+    // else if(level >= 20 && level < 50)
+    // {
+    //   var rand = GetRandomInt(5);
+    //   if(rand < 1)
+    //   {
+    //     leftDigit = GetRandomInt(21);
+    //     rightDigit = GetRandomInt(14);
+    //     operator = "-";
+    //     answer = leftDigit - rightDigit;
+    //   }
+    //   else if(rand < 2)
+    //   {
+    //     leftDigit = GetRandomInt(100);
+    //     rightDigit = GetRandomInt(100);
+    //     operator = "+";
+    //     answer = leftDigit + rightDigit;
+    //   }
+    //   else
+    //   {
+    //     leftDigit = GetRandomInt(8);
+    //     rightDigit = GetRandomInt(8);
+    //     operator = "x";
+    //     answer = leftDigit * rightDigit;
+    //   }
+
+    // }
+    // else
+    // {
+    //   var rand = GetRandomInt(5);
+    //   if(rand <= 1)
+    //   {
+    //     leftDigit = GetRandomInt(100);
+    //     rightDigit = GetRandomInt(100);
+    //     operator = "-";
+    //     answer = leftDigit - rightDigit;
+    //   }
+    //   else if(rand <= 2)
+    //   {
+    //     leftDigit = GetRandomInt(100);
+    //     rightDigit = GetRandomInt(100);
+    //     operator = "+";
+    //     answer = leftDigit + rightDigit;
+    //   }
+    //   else if(rand <= 3)
+    //   {
+    //     leftDigit = GetRandomInt(10);
+    //     rightDigit = GetRandomInt(15);
+    //     operator = "x";
+    //     answer = leftDigit * rightDigit;
+    //   }
+    //   else
+    //   {
+    //     var leftTemp = GetRandomInt(8);
+    //     var rightTemp = GetRandomInt(12);
+
+    //     if(rightTemp == 0)
+    //     {
+    //       // avoid a divide by 0.
+    //       rightTemp = 2;
+    //     }
+
+    //     var multiple =   leftTemp * rightTemp;
+
+    //     leftDigit = multiple;
+    //     rightDigit = rightTemp;
+    //     operator = "/";
+    //     answer = leftDigit / rightDigit;
+    //   }
+    // }
+    
+    // if(operator == "+")
+    // {
+    //   setPlusCount(plusCount + 1);
+    // }
+    // else if(operator == "-")
+    // {
+    //   setMinusCount(minusCount + 1);
+    // }
+    // else if(operator == "x")
+    // {
+    //   setTimesCount(timesCount + 1);
+    // }
+    // else if(operator == "/")
+    // {
+    //   setDivideCount(divideCount + 1);
+    // }
+
+    // setJsonQuestion([{
+    //     firstDigit:leftDigit,
+    //     secondDigit:rightDigit,
+    //     operator:operator,
+    //     answer:answer
+    //   }]
+    // );
   }
 
   const [jsonQuestions, setJsonQuestion] = useState([
@@ -313,12 +519,38 @@ const Praise = [
         answer:2
     }]);
 
+    const handleCheckChange = event => { 
+    
+      if(event.target.id === "CheckboxAdd")
+      {
+        setCheckboxAdditions(event.target.checked);
+      }
+      else if(event.target.id === "CheckboxMinus")
+      {
+        setCheckboxSubtractions(event.target.checked);
+      }
+      else if(event.target.id === "CheckboxTimes")
+      {
+        setCheckboxMultiplications(event.target.checked);
+      }
+      else if(event.target.id === "CheckboxDivide")
+      {
+        setCheckboxDivisions(event.target.checked);
+      }
+      
+    }; 
+
 
     
   return (
     <div className="App" style={{ backgroundImage: `url(${wallpaper})`,backgroundSize: 'cover', minHeight:1000 }} >
       <header className="App-header">
       {/* <ReactTimerStopwatch isOn={timerIsOn} className="react-stopwatch-timer__table" watchType="stopwatch" displayCricle={true} color="gray" hintColor="red" fromTime={fromTime}/> */}
+        <span className="OppositeTopcorner">
+          <img id="Hamburger" alt="burger" src={hamburgerImage} width={45} onClick={openModal}/>
+
+        </span>
+        
         <span className="Topcorner">      
           <img id="Skull" alt="Skull" src={skullImage} width={45}/>
           <span style={{verticalAlign: 'top'}}>
@@ -375,6 +607,27 @@ const Praise = [
         <button className="InputButton" onClick={() => ScoreUserEntry() }>
           {buttonText}
         </button>
+
+        <Modal         
+          isOpen={modalIsOpen}
+          onRequestClose={closeModal}
+          style={customStyles}
+          contentLabel="Help"
+        >
+          <button onClick={closeModal}>close</button>
+          <div>
+            
+            <p>
+            Include Questions of type:
+              <ul style={{listStyle:"none"}}>
+                <li><input type="checkbox" id="CheckboxAdd" value="true" checked={checkboxAdditions} onClick={handleCheckChange}/> Additions</li>
+                <li><input type="checkbox" id="CheckboxMinus" value="true" checked={checkboxSubtractions} onClick={handleCheckChange}/> Subtractions</li>
+                <li><input type="checkbox" id="CheckboxTimes" value="true" checked={checkboxMultiplications} onClick={handleCheckChange}/> Multipications</li>
+                <li><input type="checkbox" id="CheckboxDivide" value="true" checked={checkboxDivisions} onClick={handleCheckChange}/> Divisions</li>
+              </ul>
+            </p>
+          </div>
+        </Modal>
 
         {/* <Flame/> */}
 
