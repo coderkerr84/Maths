@@ -25,6 +25,7 @@ function App() {
   const [plusCount, setPlusCount] = useState(0);
   const [timesCount, setTimesCount] = useState(0);
   const [divideCount, setDivideCount] = useState(0);
+  const [pleaseChoosenOneOn, setPleaseChooseOneOn] = useState(false);
   const fromTime = new Date(0, 0, 0, 0, 0, 0, 0);
 
   const [checkboxAdditions, setCheckboxAdditions] = useState(true);
@@ -72,11 +73,12 @@ const Praise = [
   'Well done!',
   'OMG WOW COOL!',
   'You ROCK!',
-  'Keep GOING!',
+  'Keep Going!',
   'BOOGIE WOOGIE WOO!!!',
   'YOU CAN DO IT',
   'Math is kewl (n so are u)',
   'WINNING!',
+  ' :-) :-) :-) :-) ',
   'Stay focussed!',
   'The world depends on you!',
   'Beat the baddies and save the world!',
@@ -95,6 +97,7 @@ const Praise = [
   'You must be a grown-up!',
   'More brains than an octopus!',
   'Watch out Jr Einstein is about!',
+  'ANOTHER ONE BITES THE DUST',
   'Watch out Jr Einstein is about!'];
   
   const customStyles = {
@@ -118,6 +121,16 @@ const Praise = [
   }
 
   function closeModal() {
+    if($("input[type=checkbox]:checked").length === 0)
+    {
+      setPleaseChooseOneOn(true);
+      return;
+    }
+    else
+    {
+      setPleaseChooseOneOn(false);
+    }
+    
     PopulateQuestions(); 
     setLevel(level);       
     setIsOpen(false);
@@ -147,6 +160,7 @@ const Praise = [
   function ScoreUserEntry()
   {
     if(document.getElementById("userAnswer").value === '') return;
+    
     if(document.getElementById("answer").value === document.getElementById("userAnswer").value)
     {
         setScore();
@@ -454,7 +468,7 @@ const Praise = [
           style={customStyles}
           contentLabel="Help"
         >
-          <div>            
+          <div>       
             <p style={{width:"200"}}>
             Include Questions of type:
               <ul style={{listStyle:"none"}}>
@@ -464,6 +478,7 @@ const Praise = [
                 <li><input type="checkbox" id="CheckboxDivide" value="true" checked={checkboxDivisions} onClick={handleCheckChange}/> Divisions</li>
               </ul>
             </p>
+            { pleaseChoosenOneOn && <p style={{color:"darkred", fontWeight:"bold"}}>Please choose at least one!</p> }   
           </div>
           <button onClick={closeModal} className="InputButton SmallerButton">save and close</button>
         </Modal>
